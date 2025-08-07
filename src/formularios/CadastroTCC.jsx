@@ -20,7 +20,7 @@ const CadastroTcc = () => {
 
       const trabalho = {
         nome: tema,
-        dataInicio: formatarDataParaDDMMYYYY(),//hoje
+        dataInicio: formatarDataParaDDMMYYYY(),
         siapeOrientador: siape,
         matriculaAluno: user.matricula,
         status: "EM_ANDAMENTO"
@@ -30,7 +30,8 @@ const CadastroTcc = () => {
       try {
         await criarTrabalhoAcademico(trabalho);
         notifySuccess();
-
+        navigate("/principalDoAluno");
+        
       } catch (error) {
         notifyError();
       }
@@ -64,7 +65,7 @@ const CadastroTcc = () => {
     draggable: true,
   });
 
-  return (
+  return ( //renderizar a tela
     <Container fluid className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
       <Card style={{ width: "100%", maxWidth: "700px" }} className="shadow">
         <Card.Body className="d-flex flex-column justify-content-center" style={{ height: "550px" }}>

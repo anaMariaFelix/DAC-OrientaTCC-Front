@@ -58,6 +58,7 @@ const EditarOrientador = () => {
             setUser(usuarioSalvo);
             localStorage.setItem("usuario", JSON.stringify(usuarioSalvo));
             notifySuccess();
+            navigate("/listarOrientador");
 
         } catch (error) {
             console.error("Erro ao atualizar orientador:", error);

@@ -16,7 +16,7 @@ const EditarAluno = () => {
     const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
     const [carregandoUsuario, setCarregandoUsuario] = useState(true);
 
-    // carrega user e seta sues dados
+    // carrega user e seta seus dados
     useEffect(() => {
         if (user) {
             setNome(user.nome);
@@ -61,6 +61,7 @@ const EditarAluno = () => {
             setUser(usuarioSalvo);
             localStorage.setItem("usuario", JSON.stringify(usuarioSalvo));
             notifySuccess();
+            navigate("/principalDoAluno");
 
         } catch (error) {
 

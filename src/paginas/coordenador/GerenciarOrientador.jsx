@@ -126,54 +126,61 @@ const GerenciarOrientador = () => {
                             Nenhum Orientador foi cadastrado ainda.
                         </Alert>
                     ) : (
-                        <ListGroup>
-                            {listaOrientadores
-                                .filter((professor) =>
-                                    professor.nome.toLowerCase().includes(filtro.toLowerCase())
-                                )
-                                .map((professor) => (
-                                    <ListGroup.Item
-                                        className="d-flex justify-content-between align-items-center flex-wrap"
-                                        style={{
-                                            backgroundColor: "#f8f9fa",
-                                            marginBottom: "12px",
-                                            borderRadius: "6px",
-                                            cursor: "pointer",
-                                            transition: "background-color 0.3s",
-                                        }}
-                                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e9ecef")}
-                                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#f8f9fa")}
-                                        onClick={() => navigate("/coordenadorEditaOrientador", { state: { professor } })}
-                                    >
-                                        <div className="flex-grow-1">
-                                            <h5 className="mb-1">{professor.nome}</h5>
-                                            <small>SIAPE: {professor.siape}</small>
-                                        </div>
-
-                                        <OverlayTrigger
-                                            placement="right"
-                                            overlay={
-                                                <Tooltip>
-                                                    {professor.siape === user.siape
-                                                        ? "Ao remover você mesmo, será direcionado para a tela de login (sem cadastro)."
-                                                        : "Ao remover um orientador, ele será excluído do sistema."}
-                                                </Tooltip>
-                                            }
+                        <div
+                            style={{
+                                maxHeight: "250px", 
+                                overflowY: "auto",
+                                paddingRight: "10px",
+                            }}
+                        >
+                            <ListGroup>
+                                {listaOrientadores
+                                    .filter((professor) =>
+                                        professor.nome.toLowerCase().includes(filtro.toLowerCase())
+                                    )
+                                    .map((professor) => (
+                                        <ListGroup.Item
+                                            className="d-flex justify-content-between align-items-center flex-wrap"
+                                            style={{
+                                                backgroundColor: "#f8f9fa",
+                                                marginBottom: "12px",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                transition: "background-color 0.3s",
+                                            }}
+                                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e9ecef")}
+                                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#f8f9fa")}
+                                            onClick={() => navigate("/coordenadorEditaOrientador", { state: { professor } })}
                                         >
-                                            <div style={{ display: "inline-block" }}>
-                                                <CiTrash
-                                                    size={23}
-                                                    style={{ color: "red", cursor: "pointer" }}
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                        deletarOrientador(professor);
-                                                    }}
-                                                />
+                                             <div className="flex-grow-1">
+                                                <h5 className="mb-1">{professor.nome}</h5>
+                                                <small>SIAPE: {professor.siape}</small>
                                             </div>
-                                        </OverlayTrigger>
-                                    </ListGroup.Item>
-                                ))}
-                        </ListGroup>
+                                            <OverlayTrigger
+                                                placement="right"
+                                                overlay={
+                                                    <Tooltip>
+                                                        {professor.siape === user.siape
+                                                            ? "Ao remover você mesmo, será direcionado para a tela de login (sem cadastro)."
+                                                            : "Ao remover um orientador, ele será excluído do sistema."}
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <div style={{ display: "inline-block" }}>
+                                                    <CiTrash
+                                                        size={23}
+                                                        style={{ color: "red", cursor: "pointer" }}
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                            deletarOrientador(professor);
+                                                        }}
+                                                    />
+                                                </div>
+                                            </OverlayTrigger>
+                                        </ListGroup.Item>
+                                    ))}
+                            </ListGroup>
+                        </div>
                     )}
                 </div>
             </Card >

@@ -63,7 +63,7 @@ export async function atualizarAluno(alunoAtualizado) {
       headers: {
         'Content-Type': 'application/json'
       },
-      withCredentials: true, // <-- Remova isso temporariamente para testar
+      withCredentials: true,
     });
     return response.data;
 
@@ -75,9 +75,9 @@ export async function atualizarAluno(alunoAtualizado) {
 
 export async function deletarAlunoPorEmail(email) {
   try {
-    const response = await axios.delete(`${API_BASE_URL}email/${email}`);
+    const emailEncoded = encodeURIComponent(email);
+    const response = await axios.delete(`${API_BASE_URL}email/${emailEncoded}`);
     return response.data;
-
   } catch (error) {
     console.error("Erro ao deletar aluno:", error);
     throw error;

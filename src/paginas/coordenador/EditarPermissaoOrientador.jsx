@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Button, Card, Container, Form } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { atualizarPermissaoOrientador } from '../../services/OrientadorService';
+import { BuscarUsuarioPorEmail } from '../../services/UsuarioService';
 
 const EditarPermissaoOrientador = () => {
 
@@ -13,16 +13,35 @@ const EditarPermissaoOrientador = () => {
     const [orientador, setOrientador] = useState();
     const [permissaoOriginal, setPermissaoOriginal] = useState();
 
+    const verificarRole = async (email) => {
+        try {
+            const usuario = await BuscarUsuarioPorEmail(email);
+            setPermissaoOriginal(usuario.tipoRole.toLowerCase());
+        } catch (error) {
+            console.error("Erro ao buscar role:", error);
+        }
+    };
+
     useEffect(() => {
         if (location.state?.professor) {
             const professor = {
                 ...location.state.professor,
-                permissao: location.state.professor.permissao || 'orientador',
             };
             setOrientador(professor);
-            setPermissaoOriginal(professor.permissao || 'orientador');
         }
     }, [location]);
+
+    useEffect(() => {
+        if (orientador?.email) {
+            verificarRole(orientador.email);
+        }
+    }, [orientador]);
+
+    useEffect(() => {
+        if (permissaoOriginal && orientador && !orientador.permissao) {
+            setOrientador(prev => ({ ...prev, permissao: permissaoOriginal }));
+        }
+    }, [permissaoOriginal, orientador]);
 
     function handlePermissaoChange(e) {
         setOrientador(prev => ({ ...prev, permissao: e.target.value }));
@@ -35,8 +54,9 @@ const EditarPermissaoOrientador = () => {
     async function atualizacaoDoOrientador(e) {
         e.preventDefault();
         try {
+            const { permissao, ...orientadorSemPermissao } = orientador;
 
-            await atualizarPermissaoOrientador(orientador);
+            await atualizarPermissaoOrientador(orientadorSemPermissao);
             notifySuccess();
             navigate('/principalDoOrientador');
 
@@ -111,7 +131,6 @@ const EditarPermissaoOrientador = () => {
                             value="orientador"
                             checked={orientador.permissao === 'orientador'}
                             onChange={handlePermissaoChange}
-                            required
                         />
                         <Form.Check
                             inline
@@ -122,7 +141,6 @@ const EditarPermissaoOrientador = () => {
                             value="coordenador"
                             checked={orientador.permissao === 'coordenador'}
                             onChange={handlePermissaoChange}
-                            required
                         />
                     </Form.Group>
 

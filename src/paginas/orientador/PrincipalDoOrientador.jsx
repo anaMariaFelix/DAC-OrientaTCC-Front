@@ -8,19 +8,14 @@ import { useNavigate } from 'react-router-dom';
 const PrincipalDoOrientador = () => {
 
     const { user } = useAppContext();
-
-    const [show, setShow] = useState(false);
-    const [tccSelecionado, setTccSelecionado] = useState(null);
     const [tccs, setTccs] = useState([]);
     const [carregando, setCarregando] = useState(true);
     const [filtro, setFiltro] = useState('');
-
     const navigate = useNavigate();
 
 
-    const rotaParaEntrarNaAtividadeOrientador = (e) => {
-        e.preventDefault();
-        navigate("/listaAtividadesOrientador");
+    const rotaParaEntrarNaAtividadeOrientador = (tcc) => {
+        navigate("/listaAtividadesOrientador", { state: { tccSelecionado: tcc } });
     };
 
     const buscarTCCsDoOrientador = async () => {
@@ -93,7 +88,7 @@ const PrincipalDoOrientador = () => {
                                         <Card.Text><strong>Aluno:</strong> {tcc.nomeAluno}</Card.Text>
                                         <Card.Text><strong>Data:</strong> {tcc.dataInicio}</Card.Text>
                                         <div className="d-flex gap-2 mt-auto justify-content-end">
-                                            <Button variant="primary" onClick={rotaParaEntrarNaAtividadeOrientador}>Acessar</Button>
+                                            <Button variant="primary" onClick={() => rotaParaEntrarNaAtividadeOrientador(tcc)}>Acessar</Button>
                                         </div>
                                     </Card>
                                 ))}

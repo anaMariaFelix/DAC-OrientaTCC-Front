@@ -1,49 +1,71 @@
-import React, { useState, useEffect} from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../../componentes/NavBar';
 import { CiTrash } from 'react-icons/ci';
 import { Container, Card, Button, ListGroup, Badge } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { buscarAtividadesPorTrabalho } from '../../services/AtividadeService';
+import { toast } from 'react-toastify';
+import { deletarAtividade } from '../../services/AtividadeService';
 
 const ListaAtividadesOrientador = () => {
-    /*const atividades = [
-        {
-            id: 1,
-            titulo: "Atividade 1: Introdução ao React",
-            descricao: "Leia os conceitos básicos e crie seu primeiro componente.",
-            dataEntrega: "2025-06-25",
-            entregue: false,
-        },
-    ];*/
+    const location = useLocation();
+    const { tccSelecionado } = location.state;
+
+    const navigate = useNavigate();
     const [atividades, setAtividades] = useState([]);
     const trabalhoId = 1;
 
-     useEffect(() => {
-        axios.get(`http://localhost:8080/atividade/atividades/trabalho/${trabalhoId}`)
-            .then((res) => {
-                setAtividades(res.data);
-            })
-            .catch((err) => {
-                console.error("Erro ao buscar atividades:", err);
-            });
+     const buscarAtividadesDoTrabalho = async (id) => {
+        try {
+            const atividadesEncontradas = await buscarAtividadesPorTrabalho(id);
+            setAtividades(atividadesEncontradas)
+        } catch (error) {
+            console.log("Erro ao buscar atividades", error.message)
+        }
+    }
+
+    useEffect(() => {
+        if (tccSelecionado?.id) {
+            buscarAtividadesDoTrabalho(tccSelecionado.id)
+        } 
     }, []);
 
-    const deletarAtividade = (id) => {
-        if (window.confirm("Tem certeza que deseja excluir esta atividade?")) {
-            axios.delete(`http://localhost:8080/atividade/deletar/${id}`)
-                .then(() => {
-                    // Atualiza a lista após deletar
-                    setAtividades(atividades.filter((a) => a.id !== id));
-                })
-                .catch((err) => {
-                    console.error("Erro ao deletar atividade:", err);
-                });
-        }
-    };
+     const deletarAtividadeExistente = async (id) => {
+        try {
+            await deletarAtividade(id);
 
-    function rotaParaEntrarNaAtividadeOrientador(e) {
-        e.preventDefault();
-        window.location.href = "/atividadeOrientador";
+            notifySuccess();
+            setAtividades(atividades.filter(atividade => atividade.id !== id));
+        } catch (error) {
+            console.log(error.response);
+            notifyError("Não foi possivel deletar a atividade");
+        }
     }
+    function rotaParaAdicioanrAtividadeOrientador() {
+        navigate(`/atividadeOrientador`, { state: { tccSelecionado: tccSelecionado } });
+    }
+
+    function rotaParaEntrarNaAtividadeOrientador(id) {
+        navigate(`/atividadeOrientador/${id}`, { state: { tccSelecionado: tccSelecionado } });
+    }
+
+    const notifySuccess = () => toast.success(`Atividade deletada com sucesso!`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+    });
+
+    const notifyError = (mensagem) => toast.error(mensagem, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+    });
 
     return (
         <Container fluid className="d-flex justify-content-center bg-light" style={{ padding: "60px 20px" }}>
@@ -57,7 +79,7 @@ const ListaAtividadesOrientador = () => {
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h2>Atividades</h2>
                         <Button
-                            onClick={rotaParaEntrarNaAtividadeOrientador}
+                             onClick={rotaParaAdicioanrAtividadeOrientador}
                             style={{
                                 padding: "10px 20px",
                                 fontSize: "14px",
@@ -102,7 +124,7 @@ const ListaAtividadesOrientador = () => {
                                     }}
                                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e9ecef")}
                                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#f8f9fa")}
-                                    onClick={() => window.location.href = `/atividadeOrientador/${atividade.id}`}
+                                    onClick={() => rotaParaEntrarNaAtividadeOrientador(atividade.id)}
                                 >
                                     <div className="flex-grow-1">
                                         <h5 className="mb-1">{atividade.nome}</h5>
@@ -113,7 +135,11 @@ const ListaAtividadesOrientador = () => {
 
                                     <div className="text-end d-flex align-items-end gap-2">
                                         {!atividade.entregue && (
-                                            <Badge bg={atividade.status === "PENDENTE" ? "secondary" : "success"}>
+                                            <Badge bg={
+                                                atividade.status === "PENDENTE" ? "secondary" :
+                                                    atividade.status === "AVALIADO" ? "success" :
+                                                        "danger"
+                                            }>
                                                 {atividade.status}
                                             </Badge>
                                         )}
@@ -121,8 +147,8 @@ const ListaAtividadesOrientador = () => {
                                             size={25}
                                             style={{ cursor: "pointer", color: "red" }}
                                             onClick={(event) => {
-                                                event.stopPropagation(); // <-- ISSO impede abrir a edição
-                                                deletarAtividade(atividade.id);
+                                                event.stopPropagation();
+                                                deletarAtividadeExistente(atividade.id);
                                             }}
                                         />
                                     </div>

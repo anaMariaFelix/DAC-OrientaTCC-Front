@@ -35,9 +35,9 @@ export async function deletarAtividade(id) {
   }
 }
 
-export async function atualizarAtividade(id, atividade) {
+export async function atualizarAtividade(id, atividade, config = {}) {
   try {
-    const response = await axios.put(`${API_BASE_URL}editar/${id}`, atividade);
+    const response = await axios.put(`${API_BASE_URL}editar/${id}`, atividade, config);
     return response.data;
 
   } catch (error) {

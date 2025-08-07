@@ -7,9 +7,10 @@ import { BuscarUsuarioPorEmail } from '../services/UsuarioService';
 
 const NavBar = () => {
 
-    const { user } = useAppContext();
+    const { user, setUser } = useAppContext();
     const [hover, setHover] = useState(false);
     const [coordenador, setCoordenador] = useState(false);
+    const [orientador, setOrientador] = useState(false);
 
 
     const navigate = useNavigate();
@@ -18,10 +19,11 @@ const NavBar = () => {
         if (!user?.email) return;
         const usuario = await BuscarUsuarioPorEmail(user.email);
         if (usuario.tipoRole === "COORDENADOR") setCoordenador(true);
+        if (usuario.tipoRole === "ORIENTADOR") setOrientador(true);
     }
 
     const redirecionandoHomeEspecifica = async () => {
-        if (coordenador) {
+        if (coordenador || orientador ) {
             navigate("/principalDoOrientador");
         } else {
             navigate("/principalDoAluno");
@@ -57,6 +59,7 @@ const NavBar = () => {
                             style={{
                                 textDecoration: hover ? 'underline' : 'none',
                                 transition: '0.2s ease',
+                                cursor: "pointer"
                             }}
                             onClick={() => redirecionandoHomeEspecifica()}
                         >

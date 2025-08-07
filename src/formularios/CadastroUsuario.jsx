@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { criarAluno } from '../services/AlunoService';
 import { criarOrientador } from '../services/OrientadorService';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const CadastroUsuario = () => {
 
@@ -20,7 +19,7 @@ const CadastroUsuario = () => {
 
   const notifySucess = () => toast.success('Usuário cadastrado com sucesso!', {
     position: "top-right",
-    autoClose: 3000, // Fecha automaticamente após 3 segundos
+    autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -29,7 +28,7 @@ const CadastroUsuario = () => {
 
   const notifyError = (mensagem) => toast.error(mensagem, {
     position: "top-right",
-    autoClose: 3000, // Fecha automaticamente após 3 segundos
+    autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -53,6 +52,7 @@ const CadastroUsuario = () => {
         try {
           const alunoSalvo = await criarAluno(user);
           notifySucess();
+          navigate("/principalDoOrientador");
 
         } catch (error) {
           notifyError(error.response.data.message);
@@ -72,6 +72,7 @@ const CadastroUsuario = () => {
         try {
           await criarOrientador(user);
           notifySucess();
+          navigate("/principalDoOrientador");
 
         } catch (error) {
           const mensagemErro = error?.response?.data?.message || error.message || "Erro desconhecido.";

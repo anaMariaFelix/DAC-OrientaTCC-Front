@@ -38,16 +38,15 @@ function App() {
         <Route path="/principalDoAluno" element={<PrincipalDoAluno />} />
         <Route path="/cadastroTCC" element={<CadastroTcc />} />
         <Route path="/listaAtividadesAluno" element={<ListaAtividadesAluno />} />
-        <Route path="/atividadeDoAluno" element={<AdicionarTrabalhoDoTcc />} />
+        <Route path="/atividadeDoAluno/:idAtividade" element={<AdicionarTrabalhoDoTcc />} />
         <Route path="/editarAluno" element={<EditarAluno />} />
 
 
         <Route path="/principalDoOrientador" element={<PrincipalDoOrientador />} />
         <Route path="/listaAtividadesOrientador" element={<ListaAtividadesOrientador />} />
         <Route path="/atividadeOrientador" element={<AtividadeOrientador />} />
-        <Route path="/atividadeOrientador/:id" element={<AtividadeOrientador />} />
+        <Route path="/atividadeOrientador/:idAtividade" element={<AtividadeOrientador />} />
 
-        <Route path="/listarAluno" element={<ListarAluno />} />
         <Route path="/listarOrientador" element={<GerenciarOrientador />} />
         <Route path="/editarOrientador" element={<EditarOrientador />} />
 

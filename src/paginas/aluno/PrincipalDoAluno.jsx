@@ -56,7 +56,7 @@ const PrincipalDoAluno = () => {
 
     const rotaParaEntrarNoTCC = (e) => {
         e.preventDefault();
-        navigate("/listaAtividadesAluno", { state: { trabalhoAcademico } });
+        navigate("/listaAtividadesAluno", { state: { tccSelecionado: trabalhoAcademico } });
     };
 
     const buscarTrabalhoAluno = async () => {

@@ -62,13 +62,7 @@ const Login = () => {
       const usuario = await BuscarUsuarioPorEmail(emailRecuperacao);
 
       if (usuario) {
-        const identificador = usuario.siape || usuario.matricula;
-
-        await enviarEmailNovaSenha(
-          emailRecuperacao,
-          usuario.nome || "Usuário",
-          identificador
-        );
+        await enviarEmailNovaSenha(emailRecuperacao, usuario.nome);
 
         notifySuccess();
         handleClose();

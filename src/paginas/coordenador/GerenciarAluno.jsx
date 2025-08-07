@@ -115,45 +115,53 @@ const GerenciarAluno = () => {
                             Nenhum aluno foi cadastrado ainda.
                         </Alert>
                     ) : (
-                        <ListGroup>
-                            {listaAlunos
-                                .filter((aluno) =>
-                                    aluno.nome.toLowerCase().includes(filtro.toLowerCase())
-                                )
-                                .map((aluno) => (
-                                    <ListGroup.Item
-                                        key={aluno.matricula}
-                                        className="d-flex justify-content-between align-items-center"
-                                        style={{
-                                            backgroundColor: '#f8f9fa',
-                                            marginBottom: '12px',
-                                            borderRadius: '6px',
-                                            transition: 'background-color 0.3s',
-                                        }}
-                                    >
-                                        <div>
-                                            <h5 className="mb-1">{aluno.nome}</h5>
-                                            <small>Matrícula: {aluno.matricula}</small>
-                                        </div>
-                                        <OverlayTrigger
-                                            placement="right"
-                                            overlay={
-                                                <Tooltip>
-                                                    Ao remover um orientador, ele será excluído do sistema
-                                                </Tooltip>
-                                            }
+                        <div
+                            style={{
+                                maxHeight: "250px", 
+                                overflowY: "auto",
+                                paddingRight: "10px",
+                            }}
+                        >
+                            <ListGroup>
+                                {listaAlunos
+                                    .filter((aluno) =>
+                                        aluno.nome.toLowerCase().includes(filtro.toLowerCase())
+                                    )
+                                    .map((aluno) => (
+                                        <ListGroup.Item
+                                            key={aluno.matricula}
+                                            className="d-flex justify-content-between align-items-center"
+                                            style={{
+                                                backgroundColor: '#f8f9fa',
+                                                marginBottom: '12px',
+                                                borderRadius: '6px',
+                                                transition: 'background-color 0.3s',
+                                            }}
                                         >
-                                            <div style={{ display: "inline-block" }}>
-                                                <CiTrash
-                                                    size={23}
-                                                    style={{ color: "red", cursor: "pointer" }}
-                                                    onClick={() => deletarAluno(aluno)}
-                                                />
+                                            <div>
+                                                <h5 className="mb-1">{aluno.nome}</h5>
+                                                <small>Matrícula: {aluno.matricula}</small>
                                             </div>
-                                        </OverlayTrigger>
-                                    </ListGroup.Item>
-                                ))}
-                        </ListGroup>
+                                            <OverlayTrigger
+                                                placement="right"
+                                                overlay={
+                                                    <Tooltip>
+                                                        Ao remover um orientador, ele será excluído do sistema
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <div style={{ display: "inline-block" }}>
+                                                    <CiTrash
+                                                        size={23}
+                                                        style={{ color: "red", cursor: "pointer" }}
+                                                        onClick={() => deletarAluno(aluno)}
+                                                    />
+                                                </div>
+                                            </OverlayTrigger>
+                                        </ListGroup.Item>
+                                    ))}
+                            </ListGroup>
+                        </div>
                     )}
                 </div>
             </Card>
