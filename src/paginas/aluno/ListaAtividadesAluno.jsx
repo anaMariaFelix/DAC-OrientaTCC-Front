@@ -9,9 +9,7 @@ const ListaAtividadesAluno = () => {
 
     const location = useLocation();
     const { tccSelecionado } = location.state;
-
     const navigate = useNavigate();
-
     const { user, setUser } = useAppContext();
     const [atividades, setAtividades] = useState([]);
 

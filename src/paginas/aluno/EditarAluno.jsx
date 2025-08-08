@@ -9,14 +9,12 @@ import { toast } from 'react-toastify';
 const EditarAluno = () => {
     const { user, setUser } = useAppContext();
     const navigate = useNavigate();
-
     const [nome, setNome] = useState('');
     const [senha, setSenha] = useState('');
-
     const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
     const [carregandoUsuario, setCarregandoUsuario] = useState(true);
 
-    // carrega user e seta seus dados
+
     useEffect(() => {
         if (user) {
             setNome(user.nome);
@@ -24,7 +22,6 @@ const EditarAluno = () => {
         }
     }, [user]);
 
-    // muda estado do botao caso haja atualizacao nos dados
     useEffect(() => {
         if (!user) return;
 

@@ -12,13 +12,11 @@ const AtividadeOrientador = () => {
 
   const { idAtividade } = useParams();
   const { user } = useAppContext()
-
   const location = useLocation();
   const { tccSelecionado } = location.state;
-
   const navigate = useNavigate();
-
   const fileInputRef = useRef(null);
+  
 
   const [form, setForm] = useState({
     nome: "",

@@ -8,12 +8,10 @@ import { atualizarOrientador } from '../../services/OrientadorService';
 const EditarOrientador = () => {
     const { user, setUser } = useAppContext();
     const navigate = useNavigate();
-
     const [nome, setNome] = useState('');
     const [senha, setSenha] = useState('');
     const [areaAtuacao, setAreaAtuacao] = useState('');
     const [carregandoUsuario, setCarregandoUsuario] = useState(true);
-
     const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
 
     useEffect(() => {

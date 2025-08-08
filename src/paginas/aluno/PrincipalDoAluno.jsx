@@ -10,14 +10,13 @@ const PrincipalDoAluno = () => {
 
     const { user, setUser } = useAppContext();
     const navigate = useNavigate();
-
     const [show, setShow] = useState(false);
     const [trabalhoAcademico, setTrabalhoAcademico] = useState({});
     const [carregandoUsuario, setCarregandoUsuario] = useState(true);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    
     const confirmarExclusao = async (trabalhoid) => {
         try {
             await deletarTrabalhoAcademico(trabalhoid)
@@ -129,7 +128,7 @@ const PrincipalDoAluno = () => {
                                     <strong>Data de criação:</strong> {trabalhoAcademico.dataInicio}
                                 </Card.Text>
                                 <Card.Text className="mb-2">
-                                    <strong>Status:</strong> {trabalhoAcademico.status.toLowerCase()}
+                                    <strong>Status:</strong> {trabalhoAcademico.status}
                                 </Card.Text>
 
                                 <Row className="mt-4">

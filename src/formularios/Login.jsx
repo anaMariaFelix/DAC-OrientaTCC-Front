@@ -11,12 +11,9 @@ import { buscarOrientadorPorEmail } from '../services/OrientadorService';
 const Login = () => {
 
   const { setUser } = useAppContext()
-
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-
   const [emailRecuperacao, setEmailRecuperacao] = useState("");
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

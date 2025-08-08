@@ -9,10 +9,10 @@ const CadastroTcc = () => {
 
   const navigate = useNavigate();
   const { user, setUser } = useAppContext();
-
   const [tema, setTema] = useState("");
   const [siape, setSiape] = useState("");
 
+  
   const rotaParaCadastrar = async (e) => {
     e.preventDefault();
 

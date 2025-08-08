@@ -87,6 +87,7 @@ const PrincipalDoOrientador = () => {
                                         </Card.Title>
                                         <Card.Text><strong>Aluno:</strong> {tcc.nomeAluno}</Card.Text>
                                         <Card.Text><strong>Data:</strong> {tcc.dataInicio}</Card.Text>
+                                        <Card.Text><strong>Status:</strong> {tcc.status}</Card.Text>
                                         <div className="d-flex gap-2 mt-auto justify-content-end">
                                             <Button variant="primary" onClick={() => rotaParaEntrarNaAtividadeOrientador(tcc)}>Acessar</Button>
                                         </div>

@@ -12,7 +12,6 @@ const NavBar = () => {
     const [coordenador, setCoordenador] = useState(false);
     const [orientador, setOrientador] = useState(false);
 
-
     const navigate = useNavigate();
 
     const verificarSeEhCoordenador = async () => {

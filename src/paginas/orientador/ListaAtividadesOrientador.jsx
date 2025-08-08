@@ -10,7 +10,6 @@ import { deletarAtividade } from '../../services/AtividadeService';
 const ListaAtividadesOrientador = () => {
     const location = useLocation();
     const { tccSelecionado } = location.state;
-
     const navigate = useNavigate();
     const [atividades, setAtividades] = useState([]);
     const trabalhoId = 1;

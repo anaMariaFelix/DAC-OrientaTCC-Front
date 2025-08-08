@@ -42,7 +42,6 @@ const GerenciarOrientador = () => {
         }
     }
 
-
     useEffect(() => {
         buscarOrientadores();
     }, [])

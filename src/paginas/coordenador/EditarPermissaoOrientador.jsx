@@ -9,9 +9,9 @@ const EditarPermissaoOrientador = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
-
     const [orientador, setOrientador] = useState();
     const [permissaoOriginal, setPermissaoOriginal] = useState();
+    
 
     const verificarRole = async (email) => {
         try {

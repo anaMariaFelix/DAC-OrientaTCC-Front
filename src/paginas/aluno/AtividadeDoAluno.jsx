@@ -11,25 +11,18 @@ import { deletarPdf } from "../../services/PdfService";
 
 const AdicionarTrabalhoDoTcc = () => {
     const { user } = useAppContext();
-
     const { idAtividade } = useParams();
-
     const navigate = useNavigate();
-
     const location = useLocation();
     const { tccSelecionado } = location.state;
-
     const [comentario, setComentario] = useState("");
     const [comentariosAnteriores, setComentariosAnteriores] = useState([]);
     const [atividade, setAtividade] = useState(null);
-
     const [pdfs, setPdfs] = useState([]);
     const [novosPdfs, setNovosPdfs] = useState([]);
     const [pdfsRemovidos, setPdfsRemovidos] = useState([]);
-
     const [pdfsUsuario, setPdfsUsuario] = useState([]);
     const [pdfsRecebidos, setPdfsRecebidos] = useState([]);
-
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -117,21 +110,27 @@ const AdicionarTrabalhoDoTcc = () => {
         navigate("/listaAtividadesAluno", { state: { tccSelecionado: tccSelecionado } });
     };
 
-    const handleAdicionarComentario = () => {
+    const handleAdicionarComentario = async () => {
         if (comentario.trim() === "") return;
 
-        setComentariosAnteriores(prev => [...prev, comentario]);
+        const novosComentarios = [...comentariosAnteriores, comentario];
+        setComentariosAnteriores(novosComentarios);
         setComentario("");
+        try {
+            await salvarAtividade(novosComentarios);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    const salvarAtividade = async () => {
+     const salvarAtividade = async (comentariosParaSalvar = comentariosAnteriores) => {
         const atividadeAtualizada = {
             ...atividade,
             idTrabalho: tccSelecionado.id,
             nome: atividade.nome,
             descricao: atividade.descricao,
             dataEntrega: formatarDataAtualizar(atividade.dataEntrega),
-            comentarios: comentariosAnteriores,
+            comentarios: comentariosParaSalvar,
             statusPdf: atividade.status,
             nomeAdicionouPdfs: user.nome
         };
@@ -271,7 +270,7 @@ const AdicionarTrabalhoDoTcc = () => {
                                     />
 
                                     <div className="text-end mt-2">
-                                        <Button variant="primary" onClick={handleAdicionarComentario}>Adicionar comentário</Button>
+                                        <Button variant="primary" onClick={() => handleAdicionarComentario()}>Adicionar comentário</Button>
                                     </div>
                                 </Form.Group>
                             </Card.Body>
@@ -313,8 +312,6 @@ const AdicionarTrabalhoDoTcc = () => {
                                         ))}
                                     </div>
                                 )}
-
-
 
                                 <div className="d-grid gap-3 mt-4">
                                     <Button
