@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const PrincipalDoOrientador = () => {
 
-    const { user } = useAppContext();
+    const { user, token } = useAppContext();
     const [tccs, setTccs] = useState([]);
     const [carregando, setCarregando] = useState(true);
     const [filtro, setFiltro] = useState('');
@@ -15,12 +15,14 @@ const PrincipalDoOrientador = () => {
 
 
     const rotaParaEntrarNaAtividadeOrientador = (tcc) => {
+        console.log("opa 01")
         navigate("/listaAtividadesOrientador", { state: { tccSelecionado: tcc } });
     };
 
     const buscarTCCsDoOrientador = async () => {
         try {
-            const lista = await buscarTrabalhoAcademicoPorSiapeOrientador(user.siape);
+            console.log("opa 02")
+            const lista = await buscarTrabalhoAcademicoPorSiapeOrientador(user.siape, token);
             if (Array.isArray(lista)) {
                 setTccs(lista);
             }
@@ -77,19 +79,16 @@ const PrincipalDoOrientador = () => {
                                         <Card.Title style={{
                                             fontWeight: 600,
                                             fontSize: "1rem",
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            display: '-webkit-box',
-                                            WebkitLineClamp: 2,
-                                            WebkitBoxOrient: 'vertical'
+                                            wordBreak: "break-word", 
+                                            whiteSpace: "normal" 
                                         }}>
                                             {tcc.nome}
                                         </Card.Title>
-                                        <Card.Text><strong>Aluno:</strong> {tcc.nomeAluno}</Card.Text>
-                                        <Card.Text><strong>Data:</strong> {tcc.dataInicio}</Card.Text>
-                                        <Card.Text><strong>Status:</strong> {tcc.status}</Card.Text>
+                                        <Card.Text style={{ marginBottom: "5px" }}><strong>Aluno:</strong> {tcc.nomeAluno}</Card.Text>
+                                        <Card.Text style={{ marginBottom: "5px" }}><strong>Data:</strong> {tcc.dataInicio}</Card.Text>
+                                        <Card.Text style={{ marginBottom: "5px" }}><strong>Status:</strong> {tcc.status}</Card.Text>
                                         <div className="d-flex gap-2 mt-auto justify-content-end">
-                                            <Button variant="primary" onClick={() => rotaParaEntrarNaAtividadeOrientador(tcc)}>Acessar</Button>
+                                            <Button variant="primary" size="sm" onClick={() => rotaParaEntrarNaAtividadeOrientador(tcc)}>Acessar</Button>
                                         </div>
                                     </Card>
                                 ))}

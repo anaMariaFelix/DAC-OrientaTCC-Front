@@ -11,7 +11,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const GerenciarOrientador = () => {
 
-    const { user } = useAppContext();
+    const { user, setUser, token } = useAppContext();
     const navigate = useNavigate();
 
     const [listaOrientadores, setListaOrientadores] = useState([]);
@@ -19,7 +19,7 @@ const GerenciarOrientador = () => {
 
     const buscarOrientadores = async () => {
         try {
-            const lista = await buscarTodosOrientadores();
+            const lista = await buscarTodosOrientadores(token);
             setListaOrientadores(lista);
         } catch (error) {
             return
@@ -29,10 +29,10 @@ const GerenciarOrientador = () => {
 
     const deletarOrientador = async (orientador) => {
         try {
-            await deletarOrientadorPorEmail(orientador.email);
+            await deletarOrientadorPorEmail(orientador.email, token);
             notifySuccess();
             if (orientador.email === user.email) {
-                localStorage.removeItem("usuario");
+                setUser(null);
                 navigate("/login");
             }
             buscarOrientadores();
@@ -43,8 +43,9 @@ const GerenciarOrientador = () => {
     }
 
     useEffect(() => {
+        if (!token) return;
         buscarOrientadores();
-    }, [])
+    }, [token])
 
     const notifySuccess = () => toast.success('O Orientador foi deletado com sucesso!', {
         position: "top-right",
@@ -139,6 +140,7 @@ const GerenciarOrientador = () => {
                                     )
                                     .map((professor) => (
                                         <ListGroup.Item
+                                            key={professor.siape}
                                             className="d-flex justify-content-between align-items-center flex-wrap"
                                             style={{
                                                 backgroundColor: "#f8f9fa",

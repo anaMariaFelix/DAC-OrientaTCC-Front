@@ -6,21 +6,13 @@ import { toast } from 'react-toastify';
 import { atualizarOrientador } from '../../services/OrientadorService';
 
 const EditarOrientador = () => {
-    const { user, setUser } = useAppContext();
+    const { user, setUser, token } = useAppContext();
     const navigate = useNavigate();
     const [nome, setNome] = useState('');
     const [senha, setSenha] = useState('');
     const [areaAtuacao, setAreaAtuacao] = useState('');
-    const [carregandoUsuario, setCarregandoUsuario] = useState(true);
     const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
 
-    useEffect(() => {
-        const usuarioSalvo = JSON.parse(localStorage.getItem("usuario"));
-        if (usuarioSalvo) {
-            setUser(usuarioSalvo);
-        }
-        setCarregandoUsuario(false);
-    }, []);
 
     useEffect(() => {
         if (user) {
@@ -51,12 +43,12 @@ const EditarOrientador = () => {
         };
 
         try {
-            const usuarioSalvo = await atualizarOrientador(usuarioAtualizado);
+            const usuarioSalvo = await atualizarOrientador(usuarioAtualizado, token);
             
             setUser(usuarioSalvo);
             localStorage.setItem("usuario", JSON.stringify(usuarioSalvo));
             notifySuccess();
-            navigate("/listarOrientador");
+            navigate("/principalDoOrientador");
 
         } catch (error) {
             console.error("Erro ao atualizar orientador:", error);
@@ -73,7 +65,7 @@ const EditarOrientador = () => {
         draggable: true,
     });
 
-    if (carregandoUsuario) {
+     if (!user && !token) {
         return (
             <Container className="d-flex justify-content-center align-items-center vh-100 bg-light">
                 <Spinner animation="border" role="status">
@@ -82,8 +74,6 @@ const EditarOrientador = () => {
             </Container>
         );
     }
-
-    if (!user) return null;
 
     return (
         <Container className="d-flex justify-content-center align-items-center vh-100 bg-light">

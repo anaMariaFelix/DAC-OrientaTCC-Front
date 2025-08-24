@@ -6,8 +6,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { buscarAtividadesPorTrabalho } from '../../services/AtividadeService';
 import { toast } from 'react-toastify';
 import { deletarAtividade } from '../../services/AtividadeService';
+import { useAppContext } from '../../context/AppContext';
+
 
 const ListaAtividadesOrientador = () => {
+    const { token } = useAppContext();
     const location = useLocation();
     const { tccSelecionado } = location.state;
     const navigate = useNavigate();
@@ -16,7 +19,7 @@ const ListaAtividadesOrientador = () => {
 
      const buscarAtividadesDoTrabalho = async (id) => {
         try {
-            const atividadesEncontradas = await buscarAtividadesPorTrabalho(id);
+            const atividadesEncontradas = await buscarAtividadesPorTrabalho(id, token);
             setAtividades(atividadesEncontradas)
         } catch (error) {
             console.log("Erro ao buscar atividades", error.message)
@@ -24,14 +27,14 @@ const ListaAtividadesOrientador = () => {
     }
 
     useEffect(() => {
-        if (tccSelecionado?.id) {
+        if (tccSelecionado?.id && token) {
             buscarAtividadesDoTrabalho(tccSelecionado.id)
         } 
-    }, []);
+    }, [token]);
 
      const deletarAtividadeExistente = async (id) => {
         try {
-            await deletarAtividade(id);
+            await deletarAtividade(id, token);
 
             notifySuccess();
             setAtividades(atividades.filter(atividade => atividade.id !== id));

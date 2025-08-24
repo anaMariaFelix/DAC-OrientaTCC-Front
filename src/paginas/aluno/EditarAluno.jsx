@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Form, Button } from 'react-bootstrap';
+import { Container, Card, Form, Button, Spinner } from 'react-bootstrap';
 import { useAppContext } from '../../context/AppContext';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { atualizarAluno } from '../../services/AlunoService';
@@ -7,20 +7,19 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const EditarAluno = () => {
-    const { user, setUser } = useAppContext();
+    const { user, setUser, token } = useAppContext();
     const navigate = useNavigate();
     const [nome, setNome] = useState('');
     const [senha, setSenha] = useState('');
     const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
-    const [carregandoUsuario, setCarregandoUsuario] = useState(true);
 
 
     useEffect(() => {
-        if (user) {
+        if (user && token) {
             setNome(user.nome);
             setSenha('');
         }
-    }, [user]);
+    }, [user, token]);
 
     useEffect(() => {
         if (!user) return;
@@ -32,16 +31,15 @@ const EditarAluno = () => {
     }, [nome, senha, user]);
 
 
-    useEffect(() => {
-        const usuarioSalvo = JSON.parse(localStorage.getItem("usuario"));
-        if (usuarioSalvo) {
-            setUser(usuarioSalvo);
-        }
-        setCarregandoUsuario(false);
-    }, []);
-
-    if (carregandoUsuario) return <div>Carregando...</div>;
-    if (!user) return null;
+    if (!user && !token) {
+        return (
+            <Container className="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Carregando...</span>
+                </Spinner>
+            </Container>
+        );
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,7 +51,7 @@ const EditarAluno = () => {
         };
 
         try {
-            const usuarioSalvo = await atualizarAluno(usuarioAtualizado);
+            const usuarioSalvo = await atualizarAluno(usuarioAtualizado, token);
 
             setUser(usuarioSalvo);
             localStorage.setItem("usuario", JSON.stringify(usuarioSalvo));

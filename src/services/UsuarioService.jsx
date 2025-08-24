@@ -13,9 +13,13 @@ export async function atualizarSenhaUsuario(id, usuarioAtualizado) {
     }
 }
 
-export async function BuscarUsuarioPorEmail(email) {
+export async function BuscarUsuarioPorEmail(email, tokenUsuario) {
     try {
-        const response = await axios.get(`${API_BASE_URL}email/${email}`)
+        const response = await axios.get(`${API_BASE_URL}email/${email}`, {
+            headers: {
+                Authorization: `Bearer ${tokenUsuario}`
+            }
+        })
         return response.data;
     } catch (error) {
         console.log("Erro ao buscar usuário por email", error)

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 const CadastroTcc = () => {
 
   const navigate = useNavigate();
-  const { user, setUser } = useAppContext();
+  const { user, setUser, token } = useAppContext();
   const [tema, setTema] = useState("");
   const [siape, setSiape] = useState("");
 
@@ -28,7 +28,7 @@ const CadastroTcc = () => {
       console.log(trabalho)
 
       try {
-        await criarTrabalhoAcademico(trabalho);
+        await criarTrabalhoAcademico(trabalho, token);
         notifySuccess();
         navigate("/principalDoAluno");
         

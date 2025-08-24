@@ -2,9 +2,13 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8080/atividade/";
 
-export async function criarAtividade(atividade) {
+export async function criarAtividade(atividade, tokenUsuario) {
   try {
-    const response = await axios.post(`${API_BASE_URL}salvarAtividade`, atividade);
+    const response = await axios.post(`${API_BASE_URL}salvarAtividade`, atividade, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -13,9 +17,13 @@ export async function criarAtividade(atividade) {
   }
 }
 
-export async function buscarAtividadesPorTrabalho(trabalhoId) {
+export async function buscarAtividadesPorTrabalho(trabalhoId, tokenUsuario) {
   try {
-    const response = await axios.get(`${API_BASE_URL}atividades/trabalho/${trabalhoId}`);
+    const response = await axios.get(`${API_BASE_URL}atividades/trabalho/${trabalhoId}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -24,9 +32,13 @@ export async function buscarAtividadesPorTrabalho(trabalhoId) {
   }
 }
 
-export async function deletarAtividade(id) {
+export async function deletarAtividade(id, tokenUsuario) {
   try {
-    const response = await axios.delete(`${API_BASE_URL}deletar/${id}`);
+    const response = await axios.delete(`${API_BASE_URL}deletar/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -35,9 +47,13 @@ export async function deletarAtividade(id) {
   }
 }
 
-export async function atualizarAtividade(id, atividade, config = {}) {
+export async function atualizarAtividade(id, atividade, tokenUsuario) {
   try {
-    const response = await axios.put(`${API_BASE_URL}editar/${id}`, atividade, config);
+    const response = await axios.put(`${API_BASE_URL}editar/${id}`, atividade, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -46,24 +62,17 @@ export async function atualizarAtividade(id, atividade, config = {}) {
   }
 }
 
-export async function buscarUmaAtividade(id) {
+export async function buscarUmaAtividade(id, tokenUsuario) {
   try {
-    const response = await axios.get(`${API_BASE_URL}listar/${id}`);
+    const response = await axios.get(`${API_BASE_URL}listar/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
     console.error("Erro ao buscar atividade:", error);
-    throw error;
-  }
-}
-
-export async function buscarTodasAtividades() {
-  try {
-    const response = await axios.get(`${API_BASE_URL}listarTodos`);
-    return response.data;
-
-  } catch (error) {
-    console.error("Erro ao buscar atividades:", error);
     throw error;
   }
 }

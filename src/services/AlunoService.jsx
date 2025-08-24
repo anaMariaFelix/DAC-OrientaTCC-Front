@@ -2,9 +2,13 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8080/api/alunos/";
 
-export async function criarAluno(aluno) {
+export async function criarAluno(aluno, tokenUsuario) {
   try {
-    const response = await axios.post(`${API_BASE_URL}`, aluno);
+    const response = await axios.post(`${API_BASE_URL}`, aluno, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -24,9 +28,13 @@ export async function buscarAlunoPorId(id) {
   }
 }
 
-export async function buscarAlunoPorEmail(email) {
+export async function buscarAlunoPorEmail(email, tokenUsuario) {
   try {
-    const response = await axios.get(`${API_BASE_URL}email/${email}`);
+    const response = await axios.get(`${API_BASE_URL}email/${email}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -46,9 +54,13 @@ export async function buscarAlunoPorMatricula(matricula) {
   }
 }
 
-export async function buscarTodosAlunos() {
+export async function buscarTodosAlunos(tokenUsuario) {
   try {
-    const response = await axios.get(`${API_BASE_URL}`);
+    const response = await axios.get(`${API_BASE_URL}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -57,13 +69,12 @@ export async function buscarTodosAlunos() {
   }
 }
 
-export async function atualizarAluno(alunoAtualizado) {
+export async function atualizarAluno(alunoAtualizado, tokenUsuario) {
   try {
     const response = await axios.put(`${API_BASE_URL}`, alunoAtualizado, {
       headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true,
+        Authorization: `Bearer ${tokenUsuario}`
+      }
     });
     return response.data;
 
@@ -73,10 +84,14 @@ export async function atualizarAluno(alunoAtualizado) {
   }
 }
 
-export async function deletarAlunoPorEmail(email) {
+export async function deletarAlunoPorEmail(email, tokenUsuario) {
   try {
     const emailEncoded = encodeURIComponent(email);
-    const response = await axios.delete(`${API_BASE_URL}email/${emailEncoded}`);
+    const response = await axios.delete(`${API_BASE_URL}email/${emailEncoded}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar aluno:", error);

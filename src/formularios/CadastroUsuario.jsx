@@ -4,9 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { criarAluno } from '../services/AlunoService';
 import { criarOrientador } from '../services/OrientadorService';
+import { useAppContext } from '../context/AppContext';
+
 
 const CadastroUsuario = () => {
 
+  const { token } = useAppContext();
   const [siape, setSiape] = useState("");
   const [matricula, setMatricula] = useState("");
   const [nome, setNome] = useState("");
@@ -50,9 +53,9 @@ const CadastroUsuario = () => {
         };
 
         try {
-          const alunoSalvo = await criarAluno(user);
+          await criarAluno(user, token);
           notifySucess();
-          navigate("/principalDoOrientador");
+          navigate("/listarAluno");
 
         } catch (error) {
           notifyError(error.response.data.message);
@@ -70,9 +73,9 @@ const CadastroUsuario = () => {
           areaAtuacao,
         };
         try {
-          await criarOrientador(user);
+          await criarOrientador(user, token);
           notifySucess();
-          navigate("/principalDoOrientador");
+          navigate("/listarOrientador");
 
         } catch (error) {
           const mensagemErro = error?.response?.data?.message || error.message || "Erro desconhecido.";

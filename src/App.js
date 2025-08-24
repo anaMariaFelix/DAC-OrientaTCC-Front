@@ -21,7 +21,7 @@ import EditarPermissaoOrientador from './paginas/coordenador/EditarPermissaoOrie
 
 import { ToastContainer } from 'react-toastify';
 import { AppProvider } from './context/AppContext.jsx';
-
+import PrivateRoute from './componentes/PrivateRoute.jsx';
 
 
 function App() {
@@ -31,29 +31,31 @@ function App() {
     <AppProvider>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/cadastro" element={<CadastroUsuario />} />
+
         <Route path="/login" element={<Login />} />
 
+        <Route element={<PrivateRoute permissao="ALUNO" />}>
+          <Route path="/principalDoAluno" element={<PrincipalDoAluno />} />
+          <Route path="/cadastroTCC" element={<CadastroTcc />} />
+          <Route path="/listaAtividadesAluno" element={<ListaAtividadesAluno />} />
+          <Route path="/atividadeDoAluno/:idAtividade" element={<AdicionarTrabalhoDoTcc />} />
+          <Route path="/editarAluno" element={<EditarAluno />} />
+        </Route>
 
-        <Route path="/principalDoAluno" element={<PrincipalDoAluno />} />
-        <Route path="/cadastroTCC" element={<CadastroTcc />} />
-        <Route path="/listaAtividadesAluno" element={<ListaAtividadesAluno />} />
-        <Route path="/atividadeDoAluno/:idAtividade" element={<AdicionarTrabalhoDoTcc />} />
-        <Route path="/editarAluno" element={<EditarAluno />} />
-
-
-        <Route path="/principalDoOrientador" element={<PrincipalDoOrientador />} />
-        <Route path="/listaAtividadesOrientador" element={<ListaAtividadesOrientador />} />
-        <Route path="/atividadeOrientador" element={<AtividadeOrientador />} />
-        <Route path="/atividadeOrientador/:idAtividade" element={<AtividadeOrientador />} />
-
-        <Route path="/listarOrientador" element={<GerenciarOrientador />} />
-        <Route path="/editarOrientador" element={<EditarOrientador />} />
-
-        <Route path="/listarAluno" element={<GerenciarAluno />} />
-        <Route path="/listarOrientador" element={<GerenciarOrientador />} />
-        <Route path="/coordenadorEditaOrientador" element={<EditarPermissaoOrientador />} />
-
+        <Route element={<PrivateRoute permissao={["ORIENTADOR", "COORDENADOR"]} />}>
+          <Route path="/principalDoOrientador" element={<PrincipalDoOrientador />} />
+          <Route path="/listaAtividadesOrientador" element={<ListaAtividadesOrientador />} />
+          <Route path="/atividadeOrientador" element={<AtividadeOrientador />} />
+          <Route path="/atividadeOrientador/:idAtividade" element={<AtividadeOrientador />} />
+          <Route path="/editarOrientador" element={<EditarOrientador />} />
+          <Route path="/cadastro" element={<CadastroUsuario />} />
+        </Route>
+        
+        <Route element={<PrivateRoute permissao="COORDENADOR" />}>
+          <Route path="/listarAluno" element={<GerenciarAluno />} />
+          <Route path="/listarOrientador" element={<GerenciarOrientador />} />
+          <Route path="/coordenadorEditaOrientador" element={<EditarPermissaoOrientador />} />
+        </Route>
       </Routes>
       <ToastContainer />
     </AppProvider>

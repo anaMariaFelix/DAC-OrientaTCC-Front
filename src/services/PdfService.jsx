@@ -19,31 +19,13 @@ export async function criarPdf(pdfs) {
   }
 }
 
-export async function baixarPdf(id) {
+export async function deletarPdf(id, tokenUsuario) {
   try {
-    const response = await axios.get(`${API_BASE_URL}arquivo/${id}`, { responseType: 'blob' });
-    return response.data;
-
-  } catch (error) {
-    console.error("Erro ao baixar pdf:", error);
-    throw error;
-  }
-}
-
-export async function buscarPdfPorId(id) {
-  try {
-    const response = await axios.get(`${API_BASE_URL}${id}`);
-    return response.data;
-
-  } catch (error) {
-    console.error("Erro ao buscar pdf:", error);
-    throw error;
-  }
-}
-
-export async function deletarPdf(id) {
-  try {
-    const response = await axios.delete(`${API_BASE_URL}${id}`);
+    const response = await axios.delete(`${API_BASE_URL}${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {

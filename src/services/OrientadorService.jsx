@@ -2,9 +2,13 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8080/api/orientadores/";
 
-export async function criarOrientador(orientador) {
+export async function criarOrientador(orientador, tokenUsuario) {
   try {
-    const response = await axios.post(`${API_BASE_URL}`, orientador);
+    const response = await axios.post(`${API_BASE_URL}`, orientador, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -23,9 +27,13 @@ export async function buscarOrientadorPorId(id) {
   }
 }
 
-export async function buscarOrientadorPorEmail(email) {
+export async function buscarOrientadorPorEmail(email, tokenUsuario) {
   try {
-    const response = await axios.get(`${API_BASE_URL}email/${email}`);
+    const response = await axios.get(`${API_BASE_URL}email/${email}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -45,9 +53,13 @@ export async function buscarOrientadorPorSiape(siape) {
   }
 }
 
-export async function buscarTodosOrientadores() {
+export async function buscarTodosOrientadores(tokenUsuario) {
   try {
-    const response = await axios.get(`${API_BASE_URL}`);
+    const response = await axios.get(`${API_BASE_URL}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {
@@ -56,13 +68,13 @@ export async function buscarTodosOrientadores() {
   }
 }
 
-export async function atualizarOrientador(orientadorAtualizado) {
+export async function atualizarOrientador(orientadorAtualizado, tokenUsuario) {
   try {
     const response = await axios.put(`${API_BASE_URL}`, orientadorAtualizado, {
       headers: {
-        'Content-Type' : 'application/json'
+        Authorization: `Bearer ${tokenUsuario}`
       },
-      withCredentials: true
+  
     });
     return response.data;
 
@@ -72,13 +84,12 @@ export async function atualizarOrientador(orientadorAtualizado) {
   }
 }
 
-export async function atualizarPermissaoOrientador(orientadorAtualizado) {
+export async function atualizarPermissaoOrientador(orientadorAtualizado, tokenUsuario) {
   try {
     const response = await axios.put(`${API_BASE_URL}siape/${orientadorAtualizado.siape}`, orientadorAtualizado, {
       headers: {
-        'Content-Type' : 'application/json'
+        Authorization: `Bearer ${tokenUsuario}`
       },
-      withCredentials: true
     });
     return response.data;
 
@@ -88,9 +99,13 @@ export async function atualizarPermissaoOrientador(orientadorAtualizado) {
   }
 }
 
-export async function deletarOrientadorPorEmail(email) {
+export async function deletarOrientadorPorEmail(email, tokenUsuario) {
   try {
-    const response = await axios.delete(`${API_BASE_URL}email/${email}`);
+    const response = await axios.delete(`${API_BASE_URL}email/${email}`, {
+      headers: {
+        Authorization: `Bearer ${tokenUsuario}`
+      }
+    });
     return response.data;
 
   } catch (error) {

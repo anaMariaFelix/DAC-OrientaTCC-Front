@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const PrincipalDoAluno = () => {
 
-    const { user, setUser } = useAppContext();
+    const { user, setUser, token} = useAppContext();
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const [trabalhoAcademico, setTrabalhoAcademico] = useState({});
@@ -19,7 +19,7 @@ const PrincipalDoAluno = () => {
     
     const confirmarExclusao = async (trabalhoid) => {
         try {
-            await deletarTrabalhoAcademico(trabalhoid)
+            await deletarTrabalhoAcademico(trabalhoid, token)
             notifySuccess();
             handleClose();
             setTrabalhoAcademico({});
@@ -58,33 +58,12 @@ const PrincipalDoAluno = () => {
         navigate("/listaAtividadesAluno", { state: { tccSelecionado: trabalhoAcademico } });
     };
 
-    const buscarTrabalhoAluno = async () => {
-        try {
-            const trabalho = await buscarTrabalhoAcademicoPorMatriculaAluno(user.matricula);
-
-            if (!trabalho || Object.keys(trabalho).length === 0) {
-                return;
-            }
-
-            setTrabalhoAcademico(trabalho);
-
-        } catch (error) {
-            console.error("Erro ao buscar trabalho acadêmico do aluno:", error.message);
-        }
-    }
-
-    useEffect(() => {
-        console.log(user)
-        if (user?.matricula) {
-            buscarTrabalhoAluno();
-        }
-    }, [user]);
-
     useEffect(() => {
         const usuarioSalvo = JSON.parse(localStorage.getItem("usuario"));
-        if (usuarioSalvo) {
+
+        if (usuarioSalvo  && token) {
             setUser(usuarioSalvo);
-            buscarTrabalhoAcademicoPorMatriculaAluno(usuarioSalvo.matricula)
+            buscarTrabalhoAcademicoPorMatriculaAluno(usuarioSalvo.matricula, token)
                 .then(trabalho => {
                     if (trabalho && Object.keys(trabalho).length > 0) {
                         setTrabalhoAcademico(trabalho);
@@ -96,7 +75,7 @@ const PrincipalDoAluno = () => {
                 });
         }
         setCarregandoUsuario(false);
-    }, []);
+    }, [token]);
 
     if (carregandoUsuario) {
         return (

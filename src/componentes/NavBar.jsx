@@ -7,7 +7,7 @@ import { BuscarUsuarioPorEmail } from '../services/UsuarioService';
 
 const NavBar = () => {
 
-    const { user, setUser } = useAppContext();
+    const { user, setUser, token, setToken } = useAppContext();
     const [hover, setHover] = useState(false);
     const [coordenador, setCoordenador] = useState(false);
     const [orientador, setOrientador] = useState(false);
@@ -16,8 +16,11 @@ const NavBar = () => {
 
     const verificarSeEhCoordenador = async () => {
         if (!user?.email) return;
-        const usuario = await BuscarUsuarioPorEmail(user.email);
+
+        const usuario = await BuscarUsuarioPorEmail(user.email, token);
+
         if (usuario.tipoRole === "COORDENADOR") setCoordenador(true);
+
         if (usuario.tipoRole === "ORIENTADOR") setOrientador(true);
     }
 
@@ -29,19 +32,19 @@ const NavBar = () => {
         }
     }
 
+    const limparDados = () => {
+        setToken(null)
+        localStorage.removeItem("token")
+        setUser(null)
+        localStorage.removeItem("usuario")
+    }
+
     useEffect(() => {
         if (user?.email) {
             verificarSeEhCoordenador();
         }
 
     }, [user]);
-
-    useEffect(() => {
-        const usuarioSalvo = JSON.parse(localStorage.getItem("usuario"));
-        if (usuarioSalvo) {
-            setUser(usuarioSalvo);
-        }
-    }, []);
 
     return (
         <>
@@ -87,10 +90,20 @@ const NavBar = () => {
                                         navigate("/editarOrientador");
                                     }
                                 }
-                            }
-                            >Minha Conta</NavDropdown.Item>
+                            } 
+                            >
+                                Minha Conta
+                            </NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="/login" style={{ color: "red" }}>Sair</NavDropdown.Item>
+                            <NavDropdown.Item
+                                onClick={() => {
+                                    limparDados()
+                                    navigate("/login")
+                                }}
+                                style={{ color: "red" }}
+                            >
+                                Sair
+                            </NavDropdown.Item>
                         </NavDropdown>
                     </div>
                 </div>
